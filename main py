@@ -1,0 +1,53 @@
+import sys 
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+from PyQt5.QtWidgets import QLineEdit, QLabel
+from PyQt5 import uic
+import random
+import sqlite3
+
+
+class Arifmometr(QWidget):
+	def __init__(self):
+		super().__init__() 
+    uic.loadUi('main.ui', self)
+    con = sqlite3.connect("coffee.sqlite")
+    cur = con.cursor()
+		self.initUI() 
+		
+	def initUI(self): 
+		self.setWindowTitle('Эспрессо')
+
+		self.add_button = QPushButton("Кофе(случайно)", self)
+		self.add_button.clicked.connect(self.plus)
+
+		self.id = QLineEdit(self)
+		self.id.setEnabled(False)
+		self.sort = QLineEdit(self)
+		self.sort.setEnabled(False)
+		self.objig = QLineEdit(self)
+		self.objig.setEnabled(False)
+		self.tip = QLineEdit(self)
+		self.tip.setEnabled(False)
+		self.vkus = QLineEdit(self)
+		self.vkus.setEnabled(False)
+		self.price = QLineEdit(self)
+		self.price.setEnabled(False)
+		self.objom = QLineEdit(self)
+		self.objom.setEnabled(False)
+   
+	def plus(self):
+    r = str(random.randint(1, 3))
+    self.id.setText(r)
+    self.sort.setText("""SELECT sort FROM coffees WHERE id = """ + r)
+    self.objig.setText("""SELECT objig FROM coffees WHERE id = """ + r)
+    self.tip.setText("""SELECT tip FROM coffees WHERE id = """ + r)
+    self.vkus.setText("""SELECT vkus FROM coffees WHERE id = """ + r)
+    self.price.setText("""SELECT price FROM coffees WHERE id = """ + r)
+    self.objom.setText("""SELECT objom FROM coffees WHERE id = """ + r)
+
+
+if __name__ == '__main__': 
+	app = QApplication(sys.argv) 
+	ex = Arifmometr() 
+	ex.show() 
+	sys.exit(app.exec())
